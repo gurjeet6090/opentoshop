@@ -1,7 +1,7 @@
 import {
-    TextInput,
-    TouchableOpacity,
-    View,
+  TextInput,
+  TouchableOpacity,
+  View,
 } from "react-native";
 
 import { Ionicons } from "@expo/vector-icons";
@@ -16,7 +16,8 @@ export default function SearchBar() {
       {/* Input */}
       <TextInput
         placeholder="Search products..."
-        className="flex-1"
+         placeholderTextColor="#9CA3AF"
+        className="flex-1 text-gray-500"
       />
 
       {/* Voice */}

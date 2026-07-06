@@ -3,7 +3,7 @@ import {
     TouchableOpacity
 } from "react-native";
 
-import { Ionicons } from "@expo/vector-icons";
+import Ionicons from "@expo/vector-icons/Entypo";
 import { usePathname, useRouter } from "expo-router";
 
 import { useEffect } from "react";
@@ -16,13 +16,15 @@ import Animated, {
 } from "react-native-reanimated";
 
 /* Routes where tab is visible */
-const TAB_ROUTES = ["/home", "/cart", "/profile", "/shop"];
+const TAB_ROUTES = ["/home", "/cart", "/profile", "/shop","/wishlist"];
 
 const TabNames = {
     1: { name: "Home", icon: "home", route: "/home" },
-    2: { name: "Shop", icon: "add-circle", route: "/shop" },
-    3: { name: "Cart", icon: "cart", route: "/cart" },
-    4: { name: "Profile", icon: "person", route: "/profile" },
+    2: { name: "Shop", icon: "shop", route: "/shop" },
+    3: { name: "Cart", icon: "shopping-cart", route: "/cart" },
+    4: { name: "Wishlist", icon: "heart", route: "/wishlist" },
+    5: { name: "Profile", icon: "user", route: "/profile" },
+  
 
 }
 

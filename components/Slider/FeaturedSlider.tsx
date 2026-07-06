@@ -5,7 +5,7 @@ import {
   View,
 } from "react-native";
 
-import ProductCard from "./ProductCard";
+import ProductCard from "../ProductCard";
 
 const { width } = Dimensions.get("window");
 

@@ -63,8 +63,8 @@ export default function BannerSlider() {
             source={{ uri: item.img }}
             style={{
               width: width ,
-              height: 150,
-              objectFit: "fill",
+              height: 140,
+              objectFit: "cover",
               
               
             }}

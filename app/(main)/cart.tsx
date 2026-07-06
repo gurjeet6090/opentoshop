@@ -1,90 +1,124 @@
+
 import {
   FlatList,
   Image,
   Text,
   TouchableOpacity,
-  View
+  View,
 } from "react-native";
 
-import { Colors } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
-import { useState } from "react";
 
-/* Dummy Cart Data */
-const cartData = [
-  {
-    id: "1",
-    name: "Nike Air Zoom",
-    price: 2999,
-    qty: 1,
-    img: "https://cdn.dummyjson.com/product-images/beauty/red-nail-polish/thumbnail.webp",
-  },
-  {
-    id: "2",
-    name: "Denim Jacket",
-    price: 1999,
-    qty: 2,
-    img: "https://cdn.dummyjson.com/product-images/furniture/annibale-colombo-sofa/thumbnail.webp",
-  },
-];
+import { useDispatch } from "react-redux";
+
+import { Colors } from "@/constants/theme";
+
+import {
+  decreaseQty,
+  increaseQty,
+  removeFromCart,
+} from "../../store/cartSlice";
+import { CartItemtype, useCartSelector } from "../../store/hook";
+
+
+
+/* --------------- COMPONENT --------------- */
 
 export default function Cart() {
-  const [cart, setCart] = useState(cartData);
+  const dispatch = useDispatch();
+
+  const cartObj = useCartSelector(
+    (state) => state.cart.items
+  );
+
+  // Convert object → array
+  const cart: CartItemtype[] = Object.values(cartObj);
 
   /* Quantity Handler */
-  const updateQty = (id: string, type: "add" | "sub") => {
-    const updated = cart.map((item) => {
-      if (item.id === id) {
-        let q = item.qty;
-
-        if (type === "add") q++;
-        if (type === "sub" && q > 1) q--;
-
-        return { ...item, qty: q };
-      }
-
-      return item;
-    });
-
-    setCart(updated);
+  const updateQty = (
+    id: string,
+    type: "add" | "sub"
+  ): void => {
+    if (type === "add") {
+      dispatch(increaseQty(id));
+    } else {
+      dispatch(decreaseQty(id));
+    }
   };
 
   /* Remove Item */
-  const removeItem = (id: string) => {
-    setCart(cart.filter((i) => i.id !== id));
+  const removeItem = (id: string): void => {
+    dispatch(removeFromCart(id));
   };
 
-  /* Total */
-  const total = cart.reduce(
-    (sum, i) => sum + i.price * i.qty,
-    0
-  );
+
+const total: number = Number(
+  cart.reduce((sum, i) => sum + i.price * i.qty, 0).toFixed(2)
+);
+
+
+  if (cart.length === 0) {
+    return (
+      <View className="flex-1 justify-center items-center bg-gray-100">
+
+        <Ionicons
+          name="cart-outline"
+          size={70}
+          color="#999"
+        />
+
+        <Text className="mt-4 text-lg text-gray-500">
+          Your cart is empty
+        </Text>
+
+        <TouchableOpacity
+          onPress={() => router.replace("/")}
+          style={{ backgroundColor: Colors.primary }}
+          className="mt-6 px-6 py-3 rounded-xl"
+        >
+          <Text className="text-white font-bold">
+            Continue Shopping
+          </Text>
+        </TouchableOpacity>
+
+      </View>
+    );
+  }
 
   return (
     <View className="flex-1 bg-gray-100">
 
-      {/* Header */}
+      {/* ================= HEADER ================= */}
       <View className="bg-white px-5 py-4 shadow-sm">
-       <View className="flex-row  gap-5 ">
-        <TouchableOpacity onPress={() => { router.back();}} className="justify-center">
-        <Ionicons name="arrow-back" size={24} color={Colors.primary} className="self-center mb-2" />
-      </TouchableOpacity>
-        <Text className="text-2xl font-bold">
-          My Cart
-        </Text>
- <Text className="self-center flex-1   text-right text-gray-500 mt-1">
-          {cart.length} items
-        </Text>
+
+        <View className="flex-row gap-5">
+
+          <TouchableOpacity
+            onPress={() => { if(router.canGoBack()) router.back()}}
+            className="justify-center"
+          >
+            <Ionicons
+              name="arrow-back"
+              size={24}
+              color={Colors.primary}
+            />
+          </TouchableOpacity>
+
+          <Text className="text-2xl font-bold">
+            My Cart
+          </Text>
+
+          <Text className="flex-1 text-right text-gray-500 mt-1">
+            {cart.length} items
+          </Text>
 
         </View>
-          
-     
 
       </View>
 
-      {/* Cart List */}
-      <FlatList
+      {/* ================= LIST ================= */}
+      <FlatList<CartItemtype>
         data={cart}
         keyExtractor={(i) => i.id}
         showsVerticalScrollIndicator={false}
@@ -95,7 +129,7 @@ export default function Cart() {
 
             {/* Image */}
             <Image
-              source={{ uri: item.img }}
+              source={{ uri: item?.thumbnail }}
               className="w-20 h-20 rounded-xl"
               resizeMode="contain"
             />
@@ -109,10 +143,13 @@ export default function Cart() {
                   numberOfLines={1}
                   className="font-semibold text-gray-800"
                 >
-                  {item.name}
+                  {item.title}
                 </Text>
 
-                <Text style={{ color: Colors.primary }} className="font-bold mt-1">
+                <Text
+                  style={{ color: Colors.primary }}
+                  className="font-bold mt-1"
+                >
                   ₹{item.price}
                 </Text>
 
@@ -163,7 +200,7 @@ export default function Cart() {
         )}
       />
 
-      {/* Checkout Bar */}
+      {/* ================= FOOTER ================= */}
       <View className="bg-white px-5 py-4 border-t border-gray-200">
 
         {/* Summary */}
@@ -198,16 +235,19 @@ export default function Cart() {
             Total
           </Text>
 
-          <Text className="text-lg font-bold " style={{ color: Colors.primary }}>
+          <Text
+            className="text-lg font-bold"
+            style={{ color: Colors.primary }}
+          >
             ₹{total}
           </Text>
 
         </View>
 
-        {/* Checkout Button */}
+        {/* Checkout */}
         <TouchableOpacity
-        style={{ backgroundColor: Colors.primary }}
-          className=" py-4 rounded-xl items-center mb-20"
+          style={{ backgroundColor: Colors.primary }}
+          className="py-4 rounded-xl items-center mb-20"
           activeOpacity={0.85}
         >
           <Text className="text-white font-bold text-lg">

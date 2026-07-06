@@ -1,17 +1,39 @@
 import AuthInput from "@/components/AuthInput/AuthInput";
 import { getColors } from "@/constants/theme";
-import { Link, router } from "expo-router";
-import { useState } from "react";
+import { Link, router, useFocusEffect } from "expo-router";
+import { useCallback, useState } from "react";
+import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
+  BackHandler,
   Text,
   TouchableOpacity,
   useColorScheme,
-  View,
+  View
 } from "react-native";
+import ExitAlert from "../../components/ExitAlert";
 
 export default function Login() {
+
+    const { t } = useTranslation();
+
   const scheme = useColorScheme();
+  const [showExit, setShowExit] = useState(false);
+useFocusEffect(
+  useCallback(() => {
+    const onBackPress = () => {
+      setShowExit(true);
+      return true;
+    };
+
+    const sub = BackHandler.addEventListener(
+      "hardwareBackPress",
+      onBackPress
+    );
+
+    return () => sub.remove();
+  }, [])
+);
   const isDark = scheme === "dark";
   const [loading, setLoading] = useState(false);
 
@@ -27,8 +49,13 @@ export default function Login() {
 
   return (
     <View style={{ flex: 1, backgroundColor: colors.bg }} className="justify-center px-6">
+      {/* ===== Exit Modal ===== */}
+<ExitAlert
+  visible={showExit}
+  onClose={() => setShowExit(false)}
+/>
       <Text style={{ color: colors.text }} className="text-4xl font-bold">
-        Welcome Techbeeps
+       {t("welcome")} Techbeeps
       </Text>
       <Text style={{ color: colors.sub }} className="mt-2 mb-12 text-lg">
         Login to continue shopping
