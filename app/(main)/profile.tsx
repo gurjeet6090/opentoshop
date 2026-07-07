@@ -48,14 +48,6 @@ export default function Profile() {
       {/* Menu */}
       <View className="mt-6 px-4">
         <MenuItem
-          onPress={() => {
-            router.push("/editprofile");
-          }}
-          icon="person-outline"
-          title="Edit Profile"
-        />
-
-        <MenuItem
           icon="bag-outline"
           title="My Orders"
           onPress={() => {
@@ -79,11 +71,21 @@ export default function Profile() {
           }}
         />
 
-        <MenuItem icon="card-outline" title="Payment Methods" />
+        <MenuItem
+          icon="settings-outline"
+          title="Settings"
+          onPress={() => {
+            router.push("/settings");
+          }}
+        />
 
-        <MenuItem icon="settings-outline" title="Settings" />
-
-        <MenuItem icon="help-circle-outline" title="Help & Support" />
+        <MenuItem
+          icon="help-circle-outline"
+          title="Help & Support"
+          onPress={() => {
+            router.push("/helpsupport");
+          }}
+        />
       </View>
 
       {/* Logout */}
