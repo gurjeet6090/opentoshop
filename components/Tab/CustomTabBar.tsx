@@ -7,20 +7,28 @@ import { useEffect } from "react";
 
 import { Colors } from "@/constants/theme";
 import Animated, {
-    useAnimatedStyle,
-    useSharedValue,
-    withTiming,
+  useAnimatedStyle,
+  useSharedValue,
+  withTiming,
 } from "react-native-reanimated";
 
 /* Routes where tab is visible */
-const TAB_ROUTES = ["/home", "/cart", "/profile", "/shop", "/wishlist"];
+const TAB_ROUTES = [
+  "/home",
+  "/cart",
+  "/profile",
+  "/shop",
+  "/wishlist",
+  "/allcategories",
+];
 
 const TabNames = {
   1: { name: "Home", icon: "home", route: "/home" },
   2: { name: "Shop", icon: "shop", route: "/shop" },
-  3: { name: "Cart", icon: "shopping-cart", route: "/cart" },
-  4: { name: "Wishlist", icon: "heart", route: "/wishlist" },
-  5: { name: "Account", icon: "user", route: "/profile" },
+  3: { name: "Categories", icon: "shop", route: "/allcategories" },
+
+  5: { name: "Wishlist", icon: "heart", route: "/wishlist" },
+  6: { name: "Account", icon: "user", route: "/profile" },
 };
 
 export default function CustomTab() {
