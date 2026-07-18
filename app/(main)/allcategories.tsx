@@ -1,6 +1,6 @@
 import { Colors } from "@/constants/theme";
-import { Ionicons as Iconsar } from "@expo/vector-icons";
-import Ionicons from "@expo/vector-icons/Entypo";
+import { Ionicons as Iconsar, Ionicons } from "@expo/vector-icons";
+
 
 import { router } from "expo-router";
 import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
@@ -188,7 +188,7 @@ export default function AllCategories() {
             <View>
               {/* Cart Icon */}
 
-              <Ionicons name="shopping-cart" size={24} color="#929292" />
+              <Ionicons name="cart-outline" size={24} color="#929292" />
 
               {/* Badge */}
               {itemCount > 0 && (
@@ -206,12 +206,12 @@ export default function AllCategories() {
         </View>
       </View>
 
-      <View className="mt-5 px-4 ">
+      <View className=" px-4 ">
         <FlatList
           data={categories}
           numColumns={4}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingBottom: 50 }}
+          contentContainerStyle={{ paddingBottom: 70, paddingTop: 10 }}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
             <TouchableOpacity className="mr-4 items-center mb-4">
