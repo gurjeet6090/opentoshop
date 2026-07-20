@@ -28,7 +28,7 @@ export default function SettingsScreen() {
   const router = useRouter();
 
   const [pushNotification, setPushNotification] = useState(true);
-  const [emailNotification, setEmailNotification] = useState(false);
+
   const [darkMode, setDarkMode] = useState(false);
 
   const [language, setLanguage] = useState("English");
@@ -73,12 +73,6 @@ export default function SettingsScreen() {
             title="Push Notifications"
             value={pushNotification}
             onValueChange={setPushNotification}
-          />
-          <SwitchItem
-            icon="mail-outline"
-            title="Email Notifications"
-            value={emailNotification}
-            onValueChange={setEmailNotification}
           />
         </Section>
 

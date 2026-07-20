@@ -1,9 +1,10 @@
+import SearchComponent from "@/components/SearchComponent";
 import { Colors } from "@/constants/theme";
 import { Ionicons as Iconsar, Ionicons } from "@expo/vector-icons";
 
-
 import { router } from "expo-router";
-import { FlatList, Image, Text, TouchableOpacity, View } from "react-native";
+import { useRef, useState } from "react";
+import { Animated, Image, Text, TouchableOpacity, View } from "react-native";
 import { useSelector } from "react-redux";
 
 const categories = [
@@ -166,9 +167,33 @@ export default function AllCategories() {
       0,
     ),
   );
+  const [searchVisible, setSearchVisible] = useState(false);
+  const scrollY = useRef(new Animated.Value(0)).current;
+  const HEADER_HEIGHT = 60;
+  const diffClamp = Animated.diffClamp(scrollY, 0, HEADER_HEIGHT);
+
+  const translateY = diffClamp.interpolate({
+    inputRange: [0, HEADER_HEIGHT],
+    outputRange: [0, -HEADER_HEIGHT],
+  });
   return (
     <View className="bg-white">
-      <View className="bg-white px-5 py-5 shadow-sm">
+      <SearchComponent
+        visible={searchVisible}
+        onClose={() => setSearchVisible(false)}
+      />
+      <Animated.View
+        style={{
+          position: "absolute",
+          top: 0,
+          left: 0,
+          right: 0,
+          zIndex: 50,
+          height: HEADER_HEIGHT,
+          transform: [{ translateY }],
+        }}
+        className="bg-white px-5 py-5 shadow-sm"
+      >
         <View className="flex-row justify-between items-center w-full gap-4">
           <TouchableOpacity
             onPress={() => {
@@ -179,42 +204,70 @@ export default function AllCategories() {
             <Iconsar name="arrow-back" size={24} color={Colors.primary} />
           </TouchableOpacity>
 
-          <Text className="text-2xl font-bold">Categories</Text>
+          <Text className="text-2xl font-bold flex-1">Categories</Text>
+          <View className="flex-row gap-3 mr-3 items-end">
+            <TouchableOpacity onPress={() => setSearchVisible(true)}>
+              <Ionicons name="search" size={25} color="#929292" />
+            </TouchableOpacity>
+            <TouchableOpacity onPress={() => router.push("/(main)/cart")}>
+              <View>
+                {/* Cart Icon */}
 
-          <TouchableOpacity
-            onPress={() => router.push("/(main)/cart")}
-            className="mr-4 flex-1 items-end"
-          >
-            <View>
-              {/* Cart Icon */}
+                <Ionicons name="cart-outline" size={24} color="#929292" />
 
-              <Ionicons name="cart-outline" size={24} color="#929292" />
-
-              {/* Badge */}
-              {itemCount > 0 && (
-                <View
-                  style={{ backgroundColor: Colors.primary }}
-                  className="absolute -top-2 -right-2  rounded-full min-w-[16px] h-4 flex items-center justify-center px-1"
-                >
-                  <Text className="text-white text-xs font-bold">
-                    {itemCount}
-                  </Text>
-                </View>
-              )}
-            </View>
-          </TouchableOpacity>
+                {/* Badge */}
+                {itemCount > 0 && (
+                  <View
+                    style={{ backgroundColor: Colors.primary }}
+                    className="absolute -top-2 -right-2  rounded-full min-w-[16px] h-4 flex items-center justify-center px-1"
+                  >
+                    <Text className="text-white text-xs font-bold">
+                      {itemCount}
+                    </Text>
+                  </View>
+                )}
+              </View>
+            </TouchableOpacity>
+          </View>
         </View>
-      </View>
+      </Animated.View>
 
       <View className=" px-4 ">
-        <FlatList
+        <Animated.FlatList
+          onScroll={Animated.event(
+            [
+              {
+                nativeEvent: {
+                  contentOffset: {
+                    y: scrollY,
+                  },
+                },
+              },
+            ],
+            { useNativeDriver: true },
+          )}
+          scrollEventThrottle={16}
           data={categories}
           numColumns={4}
           keyExtractor={(item) => item.id}
-          contentContainerStyle={{ paddingBottom: 70, paddingTop: 10 }}
+          contentContainerStyle={{
+            paddingBottom: 70,
+
+            paddingTop: HEADER_HEIGHT + 10,
+          }}
           showsVerticalScrollIndicator={false}
           renderItem={({ item }) => (
-            <TouchableOpacity className="mr-4 items-center mb-4">
+            <TouchableOpacity
+              className="mr-4 items-center mb-4"
+              onPress={() => {
+                router.push({
+                  pathname: `/cat-products/[id]`,
+                  params: {
+                    id: item.name,
+                  },
+                });
+              }}
+            >
               <View className="bg-gray-100 p-1 rounded-md">
                 <Image
                   source={{ uri: item.img }}

@@ -89,7 +89,7 @@ export default function Cart() {
         showsVerticalScrollIndicator={false}
         contentContainerStyle={{ padding: 16 }}
         renderItem={({ item }) => (
-          <View className="bg-white rounded-2xl mb-4 p-3 shadow flex-row">
+          <View className="bg-white rounded-2xl mb-2 px-3 py-2 shadow flex-row">
             {/* Image */}
             <Image
               source={{ uri: item?.thumbnail }}
@@ -144,7 +144,7 @@ export default function Cart() {
       />
 
       {/* ================= FOOTER ================= */}
-      <View className="bg-white px-5 py-4 border-t border-gray-200">
+      <View className="bg-white px-5 py-2 border-t border-gray-200">
         {/* Summary */}
         <View className="flex-row justify-between mb-2">
           <Text className="text-gray-500">Subtotal</Text>
@@ -170,7 +170,7 @@ export default function Cart() {
         {/* Checkout */}
         <TouchableOpacity
           style={{ backgroundColor: Colors.primary }}
-          className="py-4 rounded-xl items-center mb-2"
+          className="py-4 rounded-xl items-center mb-1"
           activeOpacity={0.85}
         >
           <Text className="text-white font-bold text-lg">

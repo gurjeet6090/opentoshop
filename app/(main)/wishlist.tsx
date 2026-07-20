@@ -8,7 +8,6 @@ import {
   View,
 } from "react-native";
 
-
 import { Ionicons } from "@expo/vector-icons";
 import { router } from "expo-router";
 
@@ -49,7 +48,7 @@ const WishlistCard = ({ item, onRemove }: any) => {
         useNativeDriver: true,
       }),
     ]).start();
-  }, [fadeAnim,slideAnim]);
+  }, [fadeAnim, slideAnim]);
 
   const pressIn = () => {
     Animated.spring(scaleAnim, {
@@ -69,16 +68,12 @@ const WishlistCard = ({ item, onRemove }: any) => {
     <Animated.View
       style={{
         opacity: fadeAnim,
-        transform: [
-          { translateY: slideAnim },
-          { scale: scaleAnim },
-        ],
+        transform: [{ translateY: slideAnim }, { scale: scaleAnim }],
       }}
-      className="mb-3"
+      className="mb-2"
     >
       <Pressable onPressIn={pressIn} onPressOut={pressOut}>
-        <View className="bg-white rounded-3xl p-3 shadow flex-row">
-
+        <View className="bg-white rounded-3xl py-2 px-3 shadow flex-row">
           {/* Image */}
           <Image
             source={{ uri: item.thumbnail }}
@@ -87,53 +82,38 @@ const WishlistCard = ({ item, onRemove }: any) => {
 
           {/* Info */}
           <View className="flex-1 ml-4 justify-between">
-
-            <View>
-              <Text
-                numberOfLines={2}
-                className="text-base font-semibold text-gray-800"
-              >
-                {item.title}
-              </Text>
-
-              <Text
-                className="mt-1 text-lg font-bold"
-                style={{ color: Colors.primary }}
-              >
-                ₹{item.price}
-              </Text>
-            </View>
-
-            {/* Buttons */}
-            <View className="flex-row items-center mt-2">
-
-              <TouchableOpacity
-                onPress={() => onRemove(item)}
-                activeOpacity={0.7}
-                className="bg-red-50 px-4 py-2 rounded-full"
-              >
-                <Text className="text-red-600 text-xs font-semibold">
-                  Remove
+            <TouchableOpacity
+              onPress={() =>
+                router.push({
+                  pathname: "/product/[id]",
+                  params: { id: item.id },
+                })
+              }
+              activeOpacity={0.7}
+            >
+              <View>
+                <Text
+                  numberOfLines={2}
+                  className="text-base font-semibold text-gray-800"
+                >
+                  {item.title}
                 </Text>
-              </TouchableOpacity>
 
-              <TouchableOpacity
-               onPress={() =>
-  router.push({
-    pathname: "/product/[id]",
-    params: { id: item.id },
-  })
-}
-                activeOpacity={0.7}
-                className="ml-3 bg-indigo-50 px-4 py-2 rounded-full"
-              >
-                <Text className="text-indigo-600 text-xs font-semibold">
-                  View
+                <Text
+                  className="mt-1 text-lg font-bold"
+                  style={{ color: Colors.primary }}
+                >
+                  ₹{item.price}
                 </Text>
-              </TouchableOpacity>
-
-            </View>
+              </View>
+            </TouchableOpacity>
           </View>
+          <TouchableOpacity
+            onPress={() => onRemove(item)}
+            className="justify-center"
+          >
+            <Ionicons name="trash-outline" size={20} color="#ef4444" />
+          </TouchableOpacity>
         </View>
       </Pressable>
     </Animated.View>
@@ -145,9 +125,7 @@ const WishlistCard = ({ item, onRemove }: any) => {
 export default function Wishlist() {
   const dispatch = useDispatch();
 
-  const wishObj = useCartSelector(
-    (state) => state.wishlist.items
-  );
+  const wishObj = useCartSelector((state) => state.wishlist.items);
 
   const wishlist: WishlistItem[] = Object.values(wishObj);
 
@@ -156,12 +134,7 @@ export default function Wishlist() {
   if (wishlist.length === 0) {
     return (
       <View className="flex-1 bg-gray-100 justify-center items-center px-6">
-
-        <Ionicons
-          name="heart-outline"
-          size={90}
-          color="#9ca3af"
-        />
+        <Ionicons name="heart-outline" size={90} color="#9ca3af" />
 
         <Text className="mt-4 text-2xl font-bold text-gray-700">
           Wishlist Empty
@@ -177,11 +150,8 @@ export default function Wishlist() {
           className="mt-6 px-8 py-3 rounded-full"
           style={{ backgroundColor: Colors.primary }}
         >
-          <Text className="text-white font-bold">
-            Explore Store
-          </Text>
+          <Text className="text-white font-bold">Explore Store</Text>
         </TouchableOpacity>
-
       </View>
     );
   }
@@ -190,28 +160,17 @@ export default function Wishlist() {
 
   return (
     <View className="flex-1 bg-gray-100">
-
       {/* HEADER */}
-      <View className="bg-white px-5 py-5 flex-row items-center shadow">
-
+      <View className="bg-white px-5 py-4 flex-row items-center shadow">
         <TouchableOpacity onPress={router.back}>
-          <Ionicons
-            name="arrow-back"
-            size={26}
-            color={Colors.primary}
-          />
+          <Ionicons name="arrow-back" size={26} color={Colors.primary} />
         </TouchableOpacity>
 
-        <Text className="ml-4 text-2xl font-bold text-gray-800">
-          Wishlist
-        </Text>
+        <Text className="ml-4 text-2xl font-bold text-gray-800">Wishlist</Text>
 
         <View className="ml-auto bg-gray-100 px-3 py-1 rounded-full">
-          <Text className="text-gray-600 text-sm">
-            {wishlist.length} items
-          </Text>
+          <Text className="text-gray-600 text-sm">{wishlist.length} items</Text>
         </View>
-
       </View>
 
       {/* LIST */}
@@ -226,13 +185,10 @@ export default function Wishlist() {
         renderItem={({ item }) => (
           <WishlistCard
             item={item}
-            onRemove={(i: any) =>
-              dispatch(toggleWishlist(i))
-            }
+            onRemove={(i: any) => dispatch(toggleWishlist(i))}
           />
         )}
       />
-
     </View>
   );
 }

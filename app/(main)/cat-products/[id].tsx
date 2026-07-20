@@ -2,7 +2,7 @@ import ProductCard from "@/components/ProductCard";
 import SearchComponent from "@/components/SearchComponent";
 import { Colors } from "@/constants/theme";
 import { Ionicons } from "@expo/vector-icons";
-import { useRouter } from "expo-router";
+import { useLocalSearchParams, useRouter } from "expo-router";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
 import {
   Animated,
@@ -298,6 +298,7 @@ const CustomRangeSlider = ({
 };
 
 export default function Shop() {
+  const { id } = useLocalSearchParams();
   const [filterVisible, setFilterVisible] = useState(false);
   const [sortVisible, setSortVisible] = useState(false);
   const router = useRouter();
@@ -614,7 +615,7 @@ export default function Shop() {
               <Ionicons name="arrow-back" size={24} color={Colors.primary} />
             </TouchableOpacity>
 
-            <Text className="text-2xl font-bold flex-1">Shop</Text>
+            <Text className="text-2xl font-bold flex-1">{id}</Text>
             <View className="flex-row gap-3 mr-3 items-end">
               <TouchableOpacity onPress={() => setSearchVisible(true)}>
                 <Ionicons name="search" size={25} color="#929292" />

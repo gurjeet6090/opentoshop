@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "25576650134",
+    "project_id": "opentpshpp",
+    "storage_bucket": "opentpshpp.firebasestorage.app"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:25576650134:android:8a4e3ba0205b06202759b7",
+        "android_client_info": {
+          "package_name": "com.guri6090.OpenToShop"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAYR296sQ1aMfieXtchVf4s85VxdUVlqM0"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

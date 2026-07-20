@@ -1,7 +1,7 @@
 import AuthInput from "@/components/AuthInput/AuthInput";
 import { getColors } from "@/constants/theme";
 import { Link, router, useFocusEffect } from "expo-router";
-import { useCallback, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import { useTranslation } from "react-i18next";
 import {
   ActivityIndicator,
@@ -9,31 +9,40 @@ import {
   Text,
   TouchableOpacity,
   useColorScheme,
-  View
+  View,
 } from "react-native";
 import ExitAlert from "../../components/ExitAlert";
 
-export default function Login() {
+import {
+  getPushToken,
+  requestNotificationPermission,
+  sendLocalNotification,
+} from "@/services/NotificationService";
 
-    const { t } = useTranslation();
+export default function Login() {
+  const { t } = useTranslation();
+  useEffect(() => {
+    requestNotificationPermission();
+    getPushToken();
+  }, []);
 
   const scheme = useColorScheme();
   const [showExit, setShowExit] = useState(false);
-useFocusEffect(
-  useCallback(() => {
-    const onBackPress = () => {
-      setShowExit(true);
-      return true;
-    };
+  useFocusEffect(
+    useCallback(() => {
+      const onBackPress = () => {
+        setShowExit(true);
+        return true;
+      };
 
-    const sub = BackHandler.addEventListener(
-      "hardwareBackPress",
-      onBackPress
-    );
+      const sub = BackHandler.addEventListener(
+        "hardwareBackPress",
+        onBackPress,
+      );
 
-    return () => sub.remove();
-  }, [])
-);
+      return () => sub.remove();
+    }, []),
+  );
   const isDark = scheme === "dark";
   const [loading, setLoading] = useState(false);
 
@@ -41,6 +50,7 @@ useFocusEffect(
 
   const handleLogin = () => {
     setLoading(true);
+    sendLocalNotification();
     setTimeout(() => setLoading(false), 2000);
     // Navigate to the main app after login
     router.replace("/(main)/home");
@@ -48,26 +58,30 @@ useFocusEffect(
   };
 
   return (
-    <View style={{ flex: 1, backgroundColor: colors.bg }} className="justify-center px-6">
+    <View
+      style={{ flex: 1, backgroundColor: colors.bg }}
+      className="justify-center px-6"
+    >
       {/* ===== Exit Modal ===== */}
-<ExitAlert
-  visible={showExit}
-  onClose={() => setShowExit(false)}
-/>
+      <ExitAlert visible={showExit} onClose={() => setShowExit(false)} />
       <Text style={{ color: colors.text }} className="text-4xl font-bold">
-       {t("welcome")} Techbeeps
+        {t("welcome")} Techbeeps
       </Text>
       <Text style={{ color: colors.sub }} className="mt-2 mb-12 text-lg">
         Login to continue shopping
       </Text>
-
 
       <View
         style={{ backgroundColor: colors.card }}
         className="mt-8 p-6 rounded-3xl shadow-xl"
       >
         <AuthInput icon="mail" placeholder="Email" colors={colors} />
-        <AuthInput icon="lock-closed" placeholder="Password" secure colors={colors} />
+        <AuthInput
+          icon="lock-closed"
+          placeholder="Password"
+          secure
+          colors={colors}
+        />
 
         <TouchableOpacity
           onPress={handleLogin}
@@ -87,12 +101,12 @@ useFocusEffect(
           <Text style={{ color: colors.sub }}>
             Don’t have an account?
             <Text style={{ color: colors.btn }} className="font-bold">
-              {" "}Register
+              {" "}
+              Register
             </Text>
           </Text>
         </TouchableOpacity>
       </Link>
-
     </View>
   );
 }

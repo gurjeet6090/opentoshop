@@ -56,7 +56,17 @@ export default function CategoryList() {
         showsHorizontalScrollIndicator={false}
         keyExtractor={(item) => item.id}
         renderItem={({ item }) => (
-          <TouchableOpacity className="mr-4 items-center">
+          <TouchableOpacity
+            className="mr-4 items-center"
+            onPress={() => {
+              router.push({
+                pathname: `/cat-products/[id]`,
+                params: {
+                  id: item.name,
+                },
+              });
+            }}
+          >
             <View className="bg-gray-100 p-1 rounded-md">
               <Image
                 source={{ uri: item.img }}
