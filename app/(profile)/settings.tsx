@@ -1,7 +1,8 @@
 import { Colors } from "@/constants/theme";
+import { getPushToken } from "@/services/NotificationService";
 import { Ionicons } from "@expo/vector-icons";
 import { useRouter } from "expo-router";
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import {
   Modal,
   Pressable,
@@ -34,6 +35,16 @@ export default function SettingsScreen() {
   const [language, setLanguage] = useState("English");
   const [languageVisible, setLanguageVisible] = useState(false);
   const [aboutVisible, setAboutVisible] = useState(false);
+  const [token, settoken] = useState("");
+
+  useEffect(() => {
+    async function getdata() {
+      const data = await getPushToken();
+
+      settoken(data);
+    }
+    getdata();
+  }, []);
 
   return (
     <View className="flex-1 bg-gray-100">
@@ -158,6 +169,8 @@ export default function SettingsScreen() {
             <Text className="text-center text-gray-500 mt-4">
               Discover, purchase and read your favourite products anytime.
             </Text>
+
+            <Text>{token}</Text>
 
             <AboutRow
               icon="phone-portrait-outline"

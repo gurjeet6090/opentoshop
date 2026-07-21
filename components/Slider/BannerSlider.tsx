@@ -1,9 +1,4 @@
-import {
-  Dimensions,
-  FlatList,
-  Image,
-  View,
-} from "react-native";
+import { Dimensions, FlatList, Image, View } from "react-native";
 
 import { Colors } from "@/constants/theme";
 import { useEffect, useRef, useState } from "react";
@@ -11,9 +6,24 @@ import { useEffect, useRef, useState } from "react";
 const { width } = Dimensions.get("window");
 
 const banners = [
-  { id: "1", img: "https://plus.unsplash.com/premium_photo-1728970536937-f6a4ae97573d?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-  { id: "2", img: "https://plus.unsplash.com/premium_photo-1728970536941-955336bd7ef9?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
-  { id: "3", img: "https://plus.unsplash.com/premium_photo-1728970537046-2a09c340c8cb?q=80&w=1332&auto=format&fit=crop&ixlib=rb-4.1.0&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D" },
+  {
+    id: "3",
+    img: "https://as1.ftcdn.net/v2/jpg/03/14/28/96/1000_F_314289607_ADADbnGr64dpGnddyhZPidCoc6jgKiHK.jpg",
+  },
+
+  {
+    id: "2",
+    img: "https://as2.ftcdn.net/v2/jpg/03/14/29/31/1000_F_314293121_OMI97gmYC7I0lECkLyZpn30Pf3NYYABn.jpg",
+  },
+
+  {
+    id: "4",
+    img: "https://as1.ftcdn.net/v2/jpg/20/00/89/30/1000_F_2000893066_4cdHqODLLbKbC30gd2tL5sCVvqbfm8gQ.jpg",
+  },
+  {
+    id: "1",
+    img: "https://as1.ftcdn.net/v2/jpg/04/65/46/52/1000_F_465465248_FiKUDwScNZ1N5OoVncuiabtKsJqfWSWj.jpg",
+  },
 ];
 
 export default function BannerSlider() {
@@ -42,7 +52,6 @@ export default function BannerSlider() {
 
   return (
     <View>
-
       <FlatList
         ref={sliderRef}
         data={banners}
@@ -50,23 +59,17 @@ export default function BannerSlider() {
         pagingEnabled
         showsHorizontalScrollIndicator={false}
         keyExtractor={(i) => i.id}
-
         onMomentumScrollEnd={(e) => {
-          const i = Math.round(
-            e.nativeEvent.contentOffset.x / width
-          );
+          const i = Math.round(e.nativeEvent.contentOffset.x / width);
           setIndex(i);
         }}
-
         renderItem={({ item }) => (
           <Image
             source={{ uri: item.img }}
             style={{
-              width: width ,
-              height: 140,
+              width: width,
+              height: 160,
               objectFit: "cover",
-              
-              
             }}
           />
         )}
@@ -74,20 +77,17 @@ export default function BannerSlider() {
 
       {/* Dots */}
       <View className="flex-row justify-center mt-2">
-
         {banners.map((_, i) => (
           <View
             key={i}
-            className={`h-2 w-2 mx-1 rounded-lg `}
-
-              style={{
-              backgroundColor: index === i ? Colors.primary : "rgba(0,0,0,0.3)",
+            className={`h-2 w-4 mx-1 rounded-lg `}
+            style={{
+              backgroundColor:
+                index === i ? Colors.primary : "rgba(73, 73, 73, 0.3)",
             }}
           />
         ))}
-
       </View>
-
     </View>
   );
 }
