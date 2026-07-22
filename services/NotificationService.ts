@@ -39,7 +39,7 @@ export async function getPushToken() {
       Constants.expoConfig?.extra?.eas?.projectId,
   });
 
-  console.log("Expo Push Token:", token.data);
+  console.log("Expo Push Token:", token);
 
   return token.data;
 }

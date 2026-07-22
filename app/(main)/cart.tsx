@@ -172,6 +172,7 @@ export default function Cart() {
           style={{ backgroundColor: Colors.primary }}
           className="py-4 rounded-xl items-center mb-1"
           activeOpacity={0.85}
+          onPress={() => router.push("/checkout")}
         >
           <Text className="text-white font-bold text-lg">
             Proceed to Checkout →
